@@ -1,6 +1,7 @@
 package ua.com.alevel.nix.experienceusingclass.repository.impl;
 
 import ua.com.alevel.nix.experienceusingclass.data.Author;
+import ua.com.alevel.nix.experienceusingclass.data.Book;
 import ua.com.alevel.nix.experienceusingclass.repository.AuthorRepository;
 
 import java.util.ArrayList;
@@ -12,29 +13,53 @@ public class AuthorRepositoryImpl implements AuthorRepository {
     private final List<Author> authorList = new ArrayList<>();
 
     public Author findByFullName(final String fullName) {
-        return authorList
-                .stream()
-                .filter(author -> author.getFullName().equals(fullName))
-                .findFirst()
-                .orElse(null);
+        /*
+        for (int i = 0; i < authorList.size(); i++){
+             if (authorList.get(i).getFullName().equals(fullName)){
+                 return authorList.get(i);
+             }
+         }
+        return null;
+         */
+
+
+        for(Author author : authorList){
+           if (author.getFullName().equals(fullName)){
+               return author;
+           }
+       }
+       return null;
+
+
+
     }
 
     public List<Author> findByBook(String bookName) {
-        return authorList
-                .stream()
-                .filter(author -> author.getBookList()
-                        .stream()
-                        .anyMatch(book -> book.getBookName().equals(bookName)))
-                .collect(Collectors.toList());
+        ArrayList<Author> authors_array = new ArrayList<Author>();
+
+        for (Author author : authorList){
+            for (Book book : author.getBookList()){
+                if (book.getBookName().equals(bookName)){
+                    authors_array.add(author);
+                    break;
+                }
+            }
+        }
+        return authors_array;
     }
 
     public List<Author> findByBookId(Long bookId) {
-        return authorList
-                .stream()
-                .filter(author -> author.getBookList()
-                        .stream()
-                        .anyMatch(book -> book.getId().equals(bookId)))
-                .collect(Collectors.toList());
+        ArrayList<Author> authors_array = new ArrayList<Author>();
+
+        for (Author author : authorList){
+            for (Book book : author.getBookList()){
+                if (book.getId().equals(bookId)){
+                    authors_array.add(author);
+                    break;
+                }
+            }
+        }
+        return authors_array;
     }
 
     public void save(Author author) {
@@ -42,11 +67,12 @@ public class AuthorRepositoryImpl implements AuthorRepository {
     }
 
     public Author findById(Long id) {
-        return authorList
-                .stream()
-                .filter(author -> author.getId().equals(id))
-                .findFirst()
-                .orElse(null);
+        for (Author author : authorList){
+            if (author.getId().equals(id)){
+                return author;
+            }
+        }
+        return null;
     }
 
     public List<Author> findAll() {
@@ -54,15 +80,23 @@ public class AuthorRepositoryImpl implements AuthorRepository {
     }
 
     public void update(Author author) {
-        authorList.forEach(currentAuthor -> {
-            if (author.getId().equals(currentAuthor.getId())) {
-                currentAuthor.setBookList(author.getBookList());
-                currentAuthor.setFullName(author.getFullName());
+
+        for (Author current_author : authorList){
+            if (author.getId().equals(current_author.getId())) {
+                current_author.setBookList(author.getBookList());
+                current_author.setFullName(author.getFullName());
             }
-        });
+        }
+
     }
 
     public void remove(Long id) {
-        authorList.removeIf(author -> author.getId().equals(id));
+
+        for (Author author : authorList){
+            if (author.getId().equals(id)){
+                authorList.remove(author);
+                break;
+            }
+        }
     }
 }

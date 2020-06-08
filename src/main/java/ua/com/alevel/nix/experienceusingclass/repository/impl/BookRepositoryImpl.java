@@ -11,36 +11,45 @@ public class BookRepositoryImpl implements BookRepository {
     private final List<Book> bookList = new ArrayList<>();
 
     public Book findByBookName(String bookName) {
-        return bookList
-                .stream()
-                .filter(book -> book.getBookName().equals(bookName))
-                .findFirst()
-                .orElse(null);
+
+        for (Book book : bookList){
+            if (book.getBookName().equals(bookName))
+                return book;
+        }
+        return null;
+
     }
 
     public Book findByAuthor(String authorName) {
-        return bookList
-                .stream()
-                .filter(book -> book.getAuthor().getFullName().equals(authorName))
-                .findFirst()
-                .orElse(null);
+
+        for (Book book : bookList){
+            if (book.getAuthor().getFullName().equals(authorName)){
+                return book;
+            }
+        }
+        return null;
     }
 
     public Book findByAuthorId(Long authorId) {
-        return bookList
-                .stream()
-                .filter(book -> book.getAuthor().getId().equals(authorId))
-                .findFirst()
-                .orElse(null);
+
+        for (Book book : bookList){
+            if (book.getAuthor().getId().equals(authorId)){
+                return book;
+            }
+        }
+        return null;
     }
 
     @Override
     public Book findByUq(String uq) {
-        return bookList
-                .stream()
-                .filter(book -> book.getUq().equals(uq))
-                .findFirst()
-                .orElse(null);
+
+        for (Book book : bookList){
+            if (book.getUq().equals(uq)){
+                return book;
+            }
+        }
+        return null;
+
     }
 
     public void save(Book book) {
@@ -48,11 +57,14 @@ public class BookRepositoryImpl implements BookRepository {
     }
 
     public Book findById(Long id) {
-        return bookList
-                .stream()
-                .filter(book -> book.getId().equals(id))
-                .findFirst()
-                .orElse(null);
+
+        for (Book book : bookList){
+            if (book.getId().equals(id)){
+                return book;
+            }
+        }
+        return null;
+
     }
 
     public List<Book> findAll() {
@@ -60,15 +72,23 @@ public class BookRepositoryImpl implements BookRepository {
     }
 
     public void update(Book book) {
-        bookList.forEach(currentBook -> {
-            if (book.getId().equals(currentBook.getId())) {
-                currentBook.setAuthor(book.getAuthor());
-                currentBook.setBookName(book.getBookName());
+
+        for (Book current_book : bookList){
+            if (book.getId().equals(current_book.getId())){
+                current_book.setAuthor(book.getAuthor());
+                current_book.setBookName(book.getBookName());
             }
-        });
+        }
     }
 
     public void remove(Long id) {
-        bookList.removeIf(book -> book.getId().equals(id));
+
+        for (Book book : bookList){
+            if (book.getId().equals(id)){
+                bookList.remove(book);
+                break;
+            }
+        }
+
     }
 }
